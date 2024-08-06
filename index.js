@@ -2,11 +2,20 @@ const imageUrlInput = document.getElementById("image-url-input");
 const addBtn = document.getElementById("image-add-button");
 const imagePlaceholder = document.getElementById("image-placeholder");
 
-const IMAGES = [];
+const IMAGES = JSON.parse(localStorage.getItem("Images")) || [];
 let currentIndex = -1;
+
+if (IMAGES.length > 0) {
+  moveIndexRight();
+  updateImage();
+}
 
 function updateImage() {
   imagePlaceholder.setAttribute("src", IMAGES[currentIndex]);
+}
+
+function saveImages() {
+  localStorage.setItem("Images", JSON.stringify(IMAGES));
 }
 
 function moveIndexRight() {
@@ -37,6 +46,7 @@ function clearImage() {
   IMAGES.splice(currentIndex, 1);
   moveIndexLeft();
   updateImage();
+  saveImages();
 }
 
 addBtn.addEventListener("click", () => {
@@ -44,6 +54,7 @@ addBtn.addEventListener("click", () => {
   imagePlaceholder.setAttribute("src", imageUrl);
   IMAGES.push(imageUrl);
   currentIndex++;
+  saveImages();
 });
 
 document.addEventListener("keypress", (event) => {
